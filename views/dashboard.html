@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/toggle.css">
+    <script src="../socket.io-client/dist/socket.io.js"></script>
+    <script type="text/javascript" src="/js/Clock.js"></script>
+    <script type="text/javascript" src="/js/ReadLog.js"></script>
+</head>
+
+<body>
+    <h1>Gpu Dashboard</h1>
+    
+    <h3 id='clock'>
+        <body onload="Clock()"></body>>
+    </h3>
+
+    <div id='gpulist' class = 'gpus'></div>
+    
+    <br>
+    <h2>Load
+        <label class='switch'>
+            <input type='checkbox' onclick='toggleLoad()' />
+            <span class='slider round'></span>
+        </label>
+    </h2>
+    <br>
+    <div id = 'board'></div>
+
+</body>
+
+</html>
