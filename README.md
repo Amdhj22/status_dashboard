@@ -39,7 +39,7 @@ in name of `'hostname'_info.log`
 
 ## Build docker image
 ```bash 
-    $ docker build -f Dockefile -t gpu_data:x.y.z .
+$ docker build -f Dockefile -t gpu_data:x.y.z .
 ```
 
 ## Run docker image
