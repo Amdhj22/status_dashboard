@@ -15,12 +15,16 @@ app.use(express.static('public'));
 app.use(express.static('node_modules'));
 app.use(express.static(log_path));
 
+
 io.on('connection', function (socket) {
+
     console.log(socket.id + ' connect');
+
     var date = new Date();
     var time = date.toFormat('YYYY-MM-DD HH24:MI:SS');
 
     socket.on('init',function(client){
+
         console.log(client + '- initate dashboard - /'+time);
         files = fs.readdir(log_path, 'utf8', function (err, files) {
             if (err)
@@ -29,7 +33,7 @@ io.on('connection', function (socket) {
                 if(files[i].indexOf('.log')<0)
                     files.splice(i,1);
             }
-            io.emit('init_list', files);
+            io.to(socket.id).emit('init_list', files);
         });
     })
 
@@ -41,7 +45,7 @@ io.on('connection', function (socket) {
                 if(files[i].indexOf('.log')<0)
                     files.splice(i,1);
             }    
-            io.emit('list', files);
+            io.to(socket.id).emit('list', files);
         });
     });
 
@@ -88,12 +92,12 @@ io.on('connection', function (socket) {
             ind = data.indexOf(":", ind);
             gpu[i].Pwr = data.slice(ind + 2, data.indexOf("\n", ind));
         }
-        io.emit('data',filename,gpu);
+        io.to(socket.id).emit('data',filename,gpu ,client);
     })
 })
 
-http.listen(8080, function () {
-    console.log("Express server has started on port 8080")
+http.listen(8081, function () {
+    console.log("Express server has started on port 8081")
 
 });
 

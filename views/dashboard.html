@@ -13,21 +13,21 @@
 </head>
 
 <body>
-    <h1>Gpu Dashboard</h1>
-    
-    <h3 id='clock'>
-        <body onload="Clock()"></body>>
-    </h3>
+    <div id = 'title'>GPU Status</div>
+
+    <div id='clock'>
+        <body onload="Clock()"></body>
+    </div>
 
     <div id='gpulist' class = 'gpus'></div>
     
     <br>
-    <h2>Load
+    <div id = 'load'>Load
         <label class='switch'>
             <input type='checkbox' onclick='toggleLoad()' />
             <span class='slider round'></span>
         </label>
-    </h2>
+    </div>
     <br>
     <div id = 'board'></div>
 
