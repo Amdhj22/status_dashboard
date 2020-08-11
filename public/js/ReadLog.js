@@ -78,12 +78,22 @@ socket.on('data', function (filename, data ) {
                 var bottom = document.getElementById(filename + '_bottom_' + String(i));
     
                 if (data[i].Temp > 60) {
+                    top.removeAttribute('class');
+                    bottom.removeAttribute('class');
                     top.className = 'top hot';
                     bottom.className = 'bottom hot';
                 }
                 else if (data[i].Temp < 30) {
+                    top.removeAttribute('class');
+                    bottom.removeAttribute('class');
                     top.className = 'top cool';
                     bottom.className = 'bottom cool';
+                }
+                else {
+                    top.removeAttribute('class');
+                    bottom.removeAttribute('class');
+                    top.className = 'top';
+                    bottom.className = 'bottom';
                 }
     
                 var table = document.getElementById(filename + '_table_' + String(i));
@@ -139,8 +149,6 @@ socket.on('data', function (filename, data ) {
                     bottom.className = 'bottom cool';
                 }
                 else {
-                    top.removeAttribute('class');
-                    bottom.removeAttribute('class');
                     top.className = 'top';
                     bottom.className = 'bottom';
                 }
