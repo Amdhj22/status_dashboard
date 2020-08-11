@@ -17,15 +17,6 @@ body{
     padding: 10px;
 }
 
-#title{
-    background-color: #f6f6f6;
-    color: #767676;
-    font-weight: strong;
-    overflow: auto;
-    padding: 15px;
-    font-size: 15px;
-    border-color: #cccccc;
-}
 
 #gpulist{
     width: 97%;
@@ -53,7 +44,7 @@ body{
 .root{
     margin: 5px;
     padding: 0px;
-    width: 260px;
+    width: 250px;
     color: white;
     font-weight: bold;
     float: left;
@@ -61,8 +52,10 @@ body{
 }
 .node{
     padding: 8px;
-    width: 243px;
-    height: 18px;
+    width: 233px;
+    height: 15px;
+    text-transform: uppercase;
+    font-size: 11pt;
     color: #777;
     border: 1px solid;
     border-top-left-radius: 2px;
@@ -71,10 +64,11 @@ body{
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .top{
-    width: 248px;
-    height: 15px;
-    padding: 10px 8px 8px 5px;
-    background-color: #3b5386;
+    width: 238px;
+    height: 11px;
+    font-size: 11pt;
+    padding: 5px 8px 8px 5px;
+    background-color: #435988;
 }
 .top.hot{
     background-color: #1d2b4b;
@@ -83,9 +77,9 @@ body{
     background-color: #5d75a8;
 }
 .bottom{
-    width: 250px;
-    height: 35px;
-    padding: 8px 8px 10px 3px;
+    width: 240px;
+    height: 30px;
+    padding: 3px 8px 10px 3px;
     background-color: #304675;
     text-align: left;
     vertical-align: middle;
@@ -100,4 +94,8 @@ body{
 table{
     width: 100%;
     border-spacing: 5px 0px ;
+    font-size: 11pt;
+}
+.align_right{
+    text-align: right;
 }
