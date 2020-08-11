@@ -135,6 +135,8 @@ socket.on('data', function (filename, data ) {
                     bottom.className = 'bottom cool';
                 }
                 else {
+                    top.removeAttribute('class');
+                    bottom.removeAttribute('class');
                     top.className = 'top';
                     bottom.className = 'bottom';
                 }
