@@ -7,25 +7,47 @@
     <title>Document</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/toggle.css">
+    <link rel="stylesheet" type="text/css" href="css/tabbox.css">
+    <link rel="stylesheet" type="text/css" href="css/highchart.css">
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
     <script src="../socket.io-client/dist/socket.io.js"></script>
     <script type="text/javascript" src="/js/Clock.js"></script>
     <script type="text/javascript" src="/js/ReadLog.js"></script>
 </head>
 
 <body>
+
     <div id='clock'>
         <body onload="Clock()"></body>
     </div>
-
-    <div id='gpulist' class = 'gpus'></div>
-    
-    <div id = 'load'>Load
-        <label class='switch'>
-            <input type='checkbox' onclick='toggleLoad()' />
-            <span class='slider round'></span>
-        </label>
+    <div class="tab">
+        <ul>
+            <li data-id="con1" class="on">GPU</li>
+            <li data-id="con2">CPU/MEM</li>
+        </ul>
     </div>
-    <div id = 'board'></div>
+    
+    <div id="con1" class="conBox on">
+        <div id='gpulist' class = 'gpus'></div>
+        <div id = 'board'></div>
+    </div>
+    <div id="con2" class="conBox">
+        <div id="cpu_board"></div>
+        <script type="text/javascript" src="/js/highchart.js"></script>
+    </div>
+    
+    <script>
+        $(function(){
+            $(".tab ul li").click(function(){ 
+                $(".tab ul li").removeClass('on');
+                $(".conBox").removeClass('on');
+                $(this).addClass('on');
+                $("#"+$(this).data('id')).addClass('on');
+            });
+        });
+    </script>
 
 </body>
 

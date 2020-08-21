@@ -6,7 +6,7 @@ body{
     padding-top :0px;
     padding-left: 0px;
     padding-right: 0px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+   
 }
 
 #clock{
@@ -23,7 +23,7 @@ body{
     color: white;
     border-color: #cccccc;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-    padding: 10px;
+    padding: 5px 5px 5px 10px;
     display: inline-block;
 }
 
@@ -48,11 +48,12 @@ body{
     color: white;
     font-weight: bold;
     float: left;
+    box-shadow: none;
     
 }
 .node{
     padding: 8px;
-    width: 233px;
+    width: 222px;
     height: 15px;
     text-transform: uppercase;
     font-size: 11pt;
@@ -64,10 +65,10 @@ body{
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
 }
 .top{
-    width: 238px;
+    width: 235px;
     height: 11px;
     font-size: 11pt;
-    padding: 5px 8px 8px 5px;
+    padding: 3px 0px 8px 5px;
     background-color: #435988;
 }
 .top.hot{
@@ -78,12 +79,12 @@ body{
 }
 .bottom{
     width: 240px;
-    height: 30px;
-    padding: 3px 8px 10px 3px;
+    height: 28px;
+    padding: 0px 0px 10px 0px;
     background-color: #304675;
     text-align: left;
     vertical-align: middle;
-    font-size: 12pt;
+    font-size: 11pt;
 }
 .bottom.hot{
     background-color: #13203f;
@@ -93,9 +94,10 @@ body{
 }
 table{
     width: 100%;
-    border-spacing: 5px 0px ;
+    border-spacing: 3px 0px ;
     font-size: 11pt;
 }
 .align_right{
     text-align: right;
 }
+

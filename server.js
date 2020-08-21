@@ -5,7 +5,7 @@ var router = require('./router/router')(app);
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
-let log_path = path.join('/mnt','airsfs3','gpu_log/')
+let log_path = path.join('/mnt', 'airsfs3', 'status_log/')
 require('date-utils');
 
 app.set('views', __dirname + '/views');
@@ -23,16 +23,17 @@ io.on('connection', function (socket) {
     var date = new Date();
     var time = date.toFormat('YYYY-MM-DD HH24:MI:SS');
 
-    socket.on('init',function(client){
+    socket.on('init', function (client) {
 
-        console.log(client + '- initate dashboard - /'+time);
+        console.log(client + '- initate dashboard - /' + time);
         files = fs.readdir(log_path, 'utf8', function (err, files) {
             if (err)
-                console.log(client+'- '+err);
-            for(var i=0;i<files.length;i++){
-                if(files[i].indexOf('.log')<0)
-                    files.splice(i,1);
+                console.log(client + '- ' + err);
+            for (var i = 0; i < files.length; i++) {
+                if (files[i].indexOf('gpu.log') < 0)
+                    files.splice(i, 1);
             }
+            console.log(files);
             io.to(socket.id).emit('init_list', files);
         });
     })
@@ -40,11 +41,11 @@ io.on('connection', function (socket) {
     socket.on('req', function (client) {
         files = fs.readdir(log_path, 'utf8', function (err, files) {
             if (err)
-                console.log(client+'- '+err);
-            for(var i=0;i<files.length;i++){
-                if(files[i].indexOf('.log')<0)
-                    files.splice(i,1);
-            }    
+                console.log(client + '- ' + err);
+            for (var i = 0; i < files.length; i++) {
+                if (files[i].indexOf('gpu.log') < 0)
+                    files.splice(i, 1);
+            }
             io.to(socket.id).emit('list', files);
         });
     });
@@ -52,7 +53,7 @@ io.on('connection', function (socket) {
     socket.on('data_req', function (filename, client) {
         var date = new Date();
         var time = date.toFormat('YYYY-MM-DD HH24:MI:SS');
-        console.log(client+'- '+filename+'- request recevied- /'+time);
+        console.log(client + '- ' + filename + '- request recevied- /' + time);
 
         var data = fs.readFileSync(log_path + filename, 'utf8');
 
@@ -92,7 +93,76 @@ io.on('connection', function (socket) {
             ind = data.indexOf(":", ind);
             gpu[i].Pwr = data.slice(ind + 2, data.indexOf("\n", ind));
         }
-        io.to(socket.id).emit('data',filename,gpu ,client);
+        io.to(socket.id).emit('data', filename, gpu);
+    })
+
+    socket.on('cpu_init', function (client) {
+
+        console.log(client + '- initate cpu chart - /' + time);
+
+        files = fs.readdir(log_path, 'utf8', function (err, files) {
+            if (err)
+                console.log(client + '- ' + err);
+            for (var i = 0; i < files.length; i++) {
+                if (files[i].indexOf('cpu.log') < 0)
+                    files.splice(i, 1);
+            }
+            io.to(socket.id).emit('init_chart', files);
+        });
+    })
+
+    socket.on('cpu_list', function (client) {
+        console.log(client + '- request cpu list - /' + time);
+
+        files = fs.readdir(log_path, 'utf8', function (err, files) {
+            if (err)
+                console.log(client + '- ' + err);
+            for (var i = 0; i < files.length; i++) {
+                if (files[i].indexOf('cpu.log') < 0)
+                    files.splice(i, 1);
+            }
+            io.to(socket.id).emit('list_cpu', files);
+        });
+    })
+
+    socket.on('cpu_req', function (filename, index, client) {
+        var date = new Date();
+        var time = date.toFormat('YYYY-MM-DD HH24:MI:SS');
+        console.log(client + '- Cpu Usage request recevied- /' + time);
+
+        var data = fs.readFileSync(log_path + filename, 'utf8');
+        var i = 0;
+        var ind = data.indexOf("Cpu", ind);
+        ind = data.indexOf("id", ind);
+        var cpu_idle = Number(data.slice(ind - 6, ind - 1));
+        var cpu = 100 - cpu_idle;
+        
+        //console.log('CPU Usage: ' + avg + '%');
+
+        ind = data.indexOf("Mem", ind);
+        var mem = { total: Number(data.slice(data.indexOf("total", ind) - 9, data.indexOf("total", ind) - 1)) }
+        mem.free = Number(data.slice(data.indexOf("free", ind) - 8, data.indexOf("free", ind)))
+        mem.used = Number(data.slice(data.indexOf("used", ind) - 8, data.indexOf("used", ind)))
+        mem.usage = (mem.used / mem.total * 100).toFixed(2)
+        //console.log('Mem: ' + mem.usage);
+
+        ind = data.indexOf("COMMAND", ind);
+        ind = data.indexOf("\n", ind + 1);
+        var ps_cnt = 0;
+        var prcs = new Array();
+        while (data.indexOf("\n", ind + 1) > 0) {
+            var ps = {PID: data.slice(ind+1,data.indexOf(" ",ind+5))};
+            ps.user = data.slice(data.indexOf(" ",ind+5)+1,data.indexOf(" ",ind+10));
+            ps.cpu_usage = Number(data.slice(ind + 50, ind + 55));
+            ps.mem_usage = Number(data.slice(ind + 56, ind + 61));
+            ps.cmd = data.slice(data.indexOf(" ",ind+65)+1, data.indexOf('\n', ind + 10));
+            //console.log(data.slice(ind, data.indexOf('\n', ind + 8)));
+            //console.log(ps);
+            prcs[ps_cnt++] = ps;
+            ind = data.indexOf("\n", ind + 1);
+        }
+        //console.log('process: '+JSON.stringify(prcs));
+        io.to(socket.id).emit('cpu_data', index, cpu, mem.usage,prcs);
     })
 })
 

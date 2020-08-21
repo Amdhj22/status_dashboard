@@ -1,0 +1,12 @@
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.
+
+Traceback (most recent call last):
+  File "stat_logger.py", line 9, in <module>
+    stat = os.stat(Hostname+'_gpu.tmp')
+FileNotFoundError: [Errno 2] No such file or directory: 'hyojae-airs-desktop_gpu.tmp'
+NVIDIA-SMI has failed because it couldn't communicate with the NVIDIA driver. Make sure that the latest NVIDIA driver is installed and running.
+
+Traceback (most recent call last):
+  File "stat_logger.py", line 9, in <module>
+    stat = os.stat(Hostname+'_gpu.tmp')
+FileNotFoundError: [Errno 2] No such file or directory: 'hyojae-airs-desktop_gpu.tmp'
