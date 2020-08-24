@@ -36,6 +36,7 @@ socket.on('init_list', function (data) {
 })
 
 socket.on('list', function (list) {
+    //console.log(list);
     for (var i = 0; i < list.length; i++) {
         var gpu = document.getElementsByName('gpu');
         if (gpu[i].checked) {

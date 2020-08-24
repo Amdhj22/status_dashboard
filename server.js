@@ -30,10 +30,9 @@ io.on('connection', function (socket) {
             if (err)
                 console.log(client + '- ' + err);
             for (var i = 0; i < files.length; i++) {
-                if (files[i].indexOf('gpu.log') < 0)
-                    files.splice(i, 1);
+                if (files[i].indexOf('gpu') < 0)
+                    files.splice(i--, 1);
             }
-            console.log(files);
             io.to(socket.id).emit('init_list', files);
         });
     })
@@ -43,8 +42,8 @@ io.on('connection', function (socket) {
             if (err)
                 console.log(client + '- ' + err);
             for (var i = 0; i < files.length; i++) {
-                if (files[i].indexOf('gpu.log') < 0)
-                    files.splice(i, 1);
+                if (files[i].indexOf('gpu') < 0)
+                    files.splice(i--, 1);
             }
             io.to(socket.id).emit('list', files);
         });
@@ -104,7 +103,7 @@ io.on('connection', function (socket) {
             if (err)
                 console.log(client + '- ' + err);
             for (var i = 0; i < files.length; i++) {
-                if (files[i].indexOf('cpu.log') < 0)
+                if (files[i].indexOf('_cpu.log') < 0)
                     files.splice(i, 1);
             }
             io.to(socket.id).emit('init_chart', files);
@@ -118,8 +117,11 @@ io.on('connection', function (socket) {
             if (err)
                 console.log(client + '- ' + err);
             for (var i = 0; i < files.length; i++) {
-                if (files[i].indexOf('cpu.log') < 0)
+                if (files[i].indexOf('_cpu.log') < 0) {
+
                     files.splice(i, 1);
+                }
+
             }
             io.to(socket.id).emit('list_cpu', files);
         });
@@ -132,11 +134,12 @@ io.on('connection', function (socket) {
 
         var data = fs.readFileSync(log_path + filename, 'utf8');
         var i = 0;
-        var ind = data.indexOf("Cpu", ind);
+        var ind = data.indexOf("%Cpu(s)", ind);
+        ind = data.indexOf("%Cpu(s)", ind + 1);
         ind = data.indexOf("id", ind);
         var cpu_idle = Number(data.slice(ind - 6, ind - 1));
         var cpu = 100 - cpu_idle;
-        
+
         //console.log('CPU Usage: ' + avg + '%');
 
         ind = data.indexOf("Mem", ind);
@@ -151,18 +154,22 @@ io.on('connection', function (socket) {
         var ps_cnt = 0;
         var prcs = new Array();
         while (data.indexOf("\n", ind + 1) > 0) {
-            var ps = {PID: data.slice(ind+1,data.indexOf(" ",ind+5))};
-            ps.user = data.slice(data.indexOf(" ",ind+5)+1,data.indexOf(" ",ind+10));
-            ps.cpu_usage = Number(data.slice(ind + 50, ind + 55));
-            ps.mem_usage = Number(data.slice(ind + 56, ind + 61));
-            ps.cmd = data.slice(data.indexOf(" ",ind+65)+1, data.indexOf('\n', ind + 10));
+            var ps = { PID: data.slice(ind + 1, data.indexOf(" ", ind + 5)) };
+            ind = data.indexOf(" ", ind + 5);
+            ps.user = data.slice(ind, data.indexOf(" ", ind + 10));
+            ind = data.indexOf(" ", ind + 40);
+            //console.log(data.slice(ind,ind+10));
+            ps.cpu_usage = Number(data.slice(ind, data.indexOf(" ", ind + 5)));
+            ind = data.indexOf(" ", ind + 5);
+            ps.mem_usage = Number(data.slice(ind, data.indexOf(" ", ind + 5)));
+            ps.cmd = data.slice(data.indexOf(" ", ind + 10) + 1, data.indexOf('\n', ind + 10));
             //console.log(data.slice(ind, data.indexOf('\n', ind + 8)));
             //console.log(ps);
             prcs[ps_cnt++] = ps;
             ind = data.indexOf("\n", ind + 1);
         }
         //console.log('process: '+JSON.stringify(prcs));
-        io.to(socket.id).emit('cpu_data', index, cpu, mem.usage,prcs);
+        io.to(socket.id).emit('cpu_data', index, cpu, mem.usage, prcs);
     })
 })
 
